@@ -11,8 +11,9 @@ public class AddDeliveryAddressPopUp extends CommonActions {
         this.driver = driver;
         initElement();
     }
-   @FindBy(xpath = "//*[@id=\"dialog_m-delivery-address\"]/div/fd-delivery-address-form")
-   public WebElement popUp_addHomeAddressForm;
+
+    @FindBy(xpath = "//*[@id='dialog_m-delivery-address']/div/fd-delivery-address-form")
+    public WebElement popUp_addHomeAddressForm;
 
     public void verifyAddAddressPopupDisplayed(){
       Verify.verifyIfElementIsDisplayed(popUp_addHomeAddressForm);
