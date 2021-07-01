@@ -1,10 +1,11 @@
-package test;
+package test.checkout;
 
 import com.selenium.configuration.PropertyLoader;
 import com.selenium.pages.CheckoutPage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import test.TestBase;
 
 public class CheckoutAddDeliveryAddressExistingUserTests extends TestBase {
     CheckoutPage checkout = new  CheckoutPage (driver);

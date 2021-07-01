@@ -1,4 +1,4 @@
-package test;
+package test.checkout;
 
 
 import com.selenium.configuration.PropertyLoader;
@@ -7,6 +7,7 @@ import com.selenium.pages.CheckoutPaypalPage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import test.TestBase;
 
 public class CheckoutPaymentMethodTest extends TestBase {
     CheckoutPage checkoutPage = new CheckoutPage (driver);
