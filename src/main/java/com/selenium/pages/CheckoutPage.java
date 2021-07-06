@@ -1,9 +1,12 @@
 package com.selenium.pages;
 
 import com.selenium.configuration.CommonActions;
+import com.selenium.configuration.PropertyLoader;
 import io.qameta.allure.Step;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -56,6 +59,11 @@ public class CheckoutPage extends CommonActions {
     @FindBy(xpath = "/html/body/div[2]/fd-checkout/div/div[2]/div/fd-address-drawer/div/fd-address-drawer-form/form/div[3]")
     public WebElement popUp_pickUpLocation;
 
+    @FindBy(xpath = "//select[@id='tip-select']")
+    public WebElement dropDown_tip;
+
+    @FindBy(tagName = "fd-checkout-order-tally")
+    public WebElement orderTallyShadowRoot;
 
     public void clickOnAddPaymentMethod() {
         clickOnElement(btn_addPaymentMethod);
@@ -138,5 +146,27 @@ public class CheckoutPage extends CommonActions {
 
     public void verifyAddPaymentMethodButton(){
         Verify.verify( "Add Payment Button is not Displayed",getAttributeValue(btn_addPaymentMethod, "Add Payment Method"));
+    }
+
+    public void selectTipFromDropDownAmount(String value){
+        selectDropdownOptionByValue(dropDown_tip, value);
+    }
+
+    public void verifySelectedTipAmountDisplayedCorrectlyInOrderTally(double selectedAmount) {
+      Verify.verify(selectedAmount, getAmountOfTip());
+    }
+
+    private double getAmountOfTip() {
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.tip_container div.value"));
+        return getUSDFrom(getElementText(lbl_tip));
+    }
+
+    public double getBottleDeposit() {
+        WebElement lbl_bottleDeposit = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.bottle-deposit_container div.value"));
+        return getUSDFrom(getElementText(lbl_bottleDeposit));
+    }
+
+    public void verifyBottleDepositDisplayedCorrectlyInOrderTally() {
+        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.bottleDeposit")), getBottleDeposit());
     }
 }
