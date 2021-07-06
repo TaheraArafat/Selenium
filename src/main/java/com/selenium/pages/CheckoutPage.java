@@ -169,4 +169,17 @@ public class CheckoutPage extends CommonActions {
     public void verifyBottleDepositDisplayedCorrectlyInOrderTally() {
         Verify.verify(getUSDFrom(PropertyLoader.getValue("global.bottleDeposit")), getBottleDeposit());
     }
+
+    public double getFuelSurcharge() {
+        double fuelSurcharge = 0.00;
+        List<WebElement> lbl_fuelSurcharge = getShadowRootElement(orderTallyShadowRoot).findElements(By.cssSelector("div.fuel-surcharge_container div.value"));
+        if(lbl_fuelSurcharge.size() > 0) {
+            fuelSurcharge = getUSDFrom(getElementText(lbl_fuelSurcharge.get(0)));
+        }
+        return fuelSurcharge;
+    }
+
+    public void verifyFuelSurchargeDisplayedCorrectlyInOrderTally() {
+        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.fuelSurcharge")), getFuelSurcharge());
+    }
 }

@@ -34,6 +34,11 @@ public class CheckoutOrderTallyTests extends TestBase {
         checkoutPage.verifyBottleDepositDisplayedCorrectlyInOrderTally();
     }
 
+    @Test
+    public void fuelSurchargeShouldCorrectlyDisplayed() {
+        checkoutPage.verifyFuelSurchargeDisplayedCorrectlyInOrderTally();
+    }
+
 
 
 }
