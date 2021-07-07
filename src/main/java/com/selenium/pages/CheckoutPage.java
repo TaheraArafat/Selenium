@@ -1,7 +1,8 @@
 package com.selenium.pages;
 
 import com.selenium.configuration.CommonActions;
-import io.qameta.allure.Step;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,7 +22,6 @@ public class CheckoutPage extends CommonActions {
 
     @FindBy(xpath = "//div[@class='button-section']//button[@class='paypal-button']/fd-icon")
     public WebElement btn_addPayPal;
-
 
     @FindBy(xpath = "//*[@id=\"addpaymentmethod_masterpass\"]")
     public WebElement btn_masterPass;
@@ -56,6 +56,18 @@ public class CheckoutPage extends CommonActions {
     @FindBy(xpath = "/html/body/div[2]/fd-checkout/div/div[2]/div/fd-address-drawer/div/fd-address-drawer-form/form/div[3]")
     public WebElement popUp_pickUpLocation;
 
+    @FindBy(xpath = "//div[@class='tip-header']/span/b")
+    WebElement text_tip;
+
+    @FindBy(id = "tip-select")
+    WebElement tipSelectField;
+
+    @FindBy(tagName = "fd-checkout-order-tally")
+    WebElement orderTallyShadowRoot;
+
+    @FindBy(xpath = "/html/body/div[2]/fd-checkout/div/div[2]/div/div/fd-tip/fd-dropdown")
+    WebElement ti_textField;
+
 
     public void clickOnAddPaymentMethod() {
         clickOnElement(btn_addPaymentMethod);
@@ -88,7 +100,6 @@ public class CheckoutPage extends CommonActions {
 
     public void addPaymentMethodIsDisplayed(){
         Verify.verifyIfElementIsDisplayed(popUp_CheckOutPaymentMethod);
-
     }
 
     public void PayWithMasterPassIsDisplayed(){
@@ -138,5 +149,43 @@ public class CheckoutPage extends CommonActions {
 
     public void verifyAddPaymentMethodButton(){
         Verify.verify( "Add Payment Button is not Displayed",getAttributeValue(btn_addPaymentMethod, "Add Payment Method"));
+    }
+
+    public void verifyTipText(){
+        Verify.verify("Tip", getElementText(text_tip));
+    }
+
+    public void clickOnTipAmountField(){
+        clickOnElement(tipSelectField);
+    }
+
+    public void selectAnAmount(){
+        selectDropdownOptionByIndex(tipSelectField,5);
+    }
+
+    public void selectOtherAmount(){
+        selectDropdownOptionByVisibleText(tipSelectField,"Other Amount");
+    }
+
+    public void enterAnyTipAmount(){
+        typeText(ti_textField,"30");
+    }
+
+    public void clickOnTip(){
+    clickOnElement(text_tip);
+    }
+
+    public void verifyTipAmountIsSelected(){
+        Verify.verify("$5", getDefaultValueFromADropdown(tipSelectField));
+    }
+
+    public String getTipFromOrderTally(){
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.tip_container div.value"));
+        String st = lbl_tip.getText();
+        return st.substring(1);
+    }
+
+    public void verifyOtherAmountIsSelected(){
+        Verify.verify("30.00",getTipFromOrderTally());
     }
 }

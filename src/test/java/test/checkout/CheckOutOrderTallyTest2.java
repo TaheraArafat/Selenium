@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import test.TestBase;
 
-public class CheckOutOrderTallyTest extends TestBase {
+public class CheckOutOrderTallyTest2 extends TestBase {
 
     CheckoutPage checkoutPage = new CheckoutPage(driver);
     private static String navigateToCheckout = "https://fdtest.freshdirect.com/expressco/checkout.jsp";

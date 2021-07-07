@@ -1,6 +1,7 @@
 package com.selenium.configuration;
 
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,6 +26,17 @@ public class CommonActions {
     protected void clickOnElement(WebElement elementToClick) {
         elementHighlighter(elementToClick);
         elementToClick.click();
+    }
+
+    public void dd(WebElement element){
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        jse.executeScript("arguments[0].value='enter the value here';", element);
+    }
+
+
+    public void enterTextUsingJavaScriptExe(String text, WebElement element){
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        jse.executeScript(text, element);
     }
 
     public void navigateTo(String url) {
@@ -64,7 +76,6 @@ public class CommonActions {
         return element.getText();
     }
 
-
     public void switchWindow(int windowIndex, boolean closeCurrentWindow) {
         Set<String> availableWindows = driver.getWindowHandles();
         List<String> windowsList = new ArrayList<>(availableWindows);
@@ -80,7 +91,6 @@ public class CommonActions {
         elementHighlighter(iframe);
         driver.switchTo().frame(iframe);
     }
-
 
     protected void switchBackToDefaultIframe() {
         driver.switchTo().defaultContent();
@@ -113,7 +123,7 @@ public class CommonActions {
         select.selectByValue(value);
     }
 
-    protected void selectDropdownOptionByVisibleText(WebElement element,String Text) {
+    protected void selectDropdownOptionByVisibleText(WebElement element, String Text) {
         elementHighlighter(element);
         Select select= new Select(element);
         select.selectByVisibleText(Text);
@@ -157,4 +167,11 @@ public class CommonActions {
     public void clearInputField(WebElement element){
         element.clear();
     }
+
+    public WebElement getShadowRootElement(WebElement element) {
+        WebElement ele = (WebElement) ((JavascriptExecutor)driver)
+                .executeScript("return arguments[0].shadowRoot", element);
+        return ele;
+    }
+
 }
