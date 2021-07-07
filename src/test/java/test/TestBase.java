@@ -23,6 +23,12 @@ public class TestBase extends WebDriverConfig {
        return getText;
     }
 
+    public int getRandomNumber() {
+        Random random = new Random();
+        return random.nextInt(24) + 1;
+    }
+
+
     public static void createANewAccount(String username) {
         FDHomePage fdHomePage = new FDHomePage(driver);
         fdHomePage.headerArea.clickOnCreateAccountButton();

@@ -14,6 +14,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonActions {
     public static WebDriver driver;
@@ -153,6 +155,27 @@ public class CommonActions {
     public String getAttributeValue(WebElement element, String attributeName){
         return element.getAttribute(attributeName);
     }
+
+    public WebElement getShadowRootElement(WebElement element) {
+        elementHighlighter(element);
+        return (WebElement) ((JavascriptExecutor) driver)
+                .executeScript("return arguments[0].shadowRoot",element);
+    }
+
+    public double getUSDFrom(String givenString) {
+        return getDoubleFrom(givenString, "[0-9]+.[0-9]+");
+    }
+
+    public double getDoubleFrom(String givenString, String pattern) {
+        double value = 0.0;
+        Matcher matcher = Pattern.compile(pattern).matcher(givenString);
+        if (matcher.find()) {
+            value = Double.parseDouble(matcher.group(0));
+        }
+        return value;
+    }
+
+
 
     public void clearInputField(WebElement element){
         element.clear();
