@@ -1,6 +1,7 @@
 package com.selenium.configuration;
 
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,7 +11,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +46,6 @@ public class CommonActions {
         return driver.getTitle();
     }
 
-
     protected void hoverOnElement(WebElement elementToHover) {
         elementHighlighter(elementToHover);
         Actions actions = new Actions(driver);
@@ -66,7 +65,6 @@ public class CommonActions {
         return element.getText();
     }
 
-
     public void switchWindow(int windowIndex, boolean closeCurrentWindow) {
         Set<String> availableWindows = driver.getWindowHandles();
         List<String> windowsList = new ArrayList<>(availableWindows);
@@ -82,7 +80,6 @@ public class CommonActions {
         elementHighlighter(iframe);
         driver.switchTo().frame(iframe);
     }
-
 
     protected void switchBackToDefaultIframe() {
         driver.switchTo().defaultContent();
@@ -109,13 +106,19 @@ public class CommonActions {
         select.selectByIndex(index);
     }
 
+    protected void selectDropdownOptionByIndex(WebElement element, String index) {
+        elementHighlighter(element);
+        Select select = new Select(element);
+        select.selectByValue(index);
+    }
+
     protected void selectDropdownOptionByValue(WebElement element,String value) {
         elementHighlighter(element);
         Select select = new Select(element);
         select.selectByValue(value);
     }
 
-    protected void selectDropdownOptionByVisibleText(WebElement element,String Text) {
+    protected void selectDropdownOptionByVisibleText(WebElement element, String Text) {
         elementHighlighter(element);
         Select select= new Select(element);
         select.selectByVisibleText(Text);
@@ -175,9 +178,14 @@ public class CommonActions {
         return value;
     }
 
-
-
     public void clearInputField(WebElement element){
         element.clear();
     }
+
+//    public WebElement getShadowRootElement(WebElement element) {
+//        WebElement ele = (WebElement) ((JavascriptExecutor)driver)
+//                .executeScript("return arguments[0].shadowRoot", element);
+//        return ele;
+//    }
+
 }

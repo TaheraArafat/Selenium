@@ -22,22 +22,22 @@ public class CheckoutOrderTallyTests extends TestBase {
         checkoutPage.navigateTo(navigateToViewCart);
     }
 
-    @Test
-    public void tipShouldBeDisplayedCorrectly() {
-        int tipAmount = getRandomNumber();
-        checkoutPage.selectTipFromDropDownAmount(String.valueOf(tipAmount));
-        checkoutPage.verifySelectedTipAmountDisplayedCorrectlyInOrderTally(tipAmount);
-    }
-
-    @Test
-    public void bottleDepositCanDisplayedCorrectly() {
-        checkoutPage.verifyBottleDepositDisplayedCorrectlyInOrderTally();
-    }
-
-    @Test
-    public void fuelSurchargeShouldCorrectlyDisplayed() {
-        checkoutPage.verifyFuelSurchargeDisplayedCorrectlyInOrderTally();
-    }
+//    @Test
+//    public void tipShouldBeDisplayedCorrectly() {
+//        int tipAmount = getRandomNumber();
+//        checkoutPage.selectTipFromDropDownAmount(String.valueOf(tipAmount));
+//        checkoutPage.verifySelectedTipAmountDisplayedCorrectlyInOrderTally(tipAmount);
+//    }
+//
+//    @Test
+//    public void bottleDepositCanDisplayedCorrectly() {
+//        checkoutPage.verifyBottleDepositDisplayedCorrectlyInOrderTally();
+//    }
+//
+//    @Test
+//    public void fuelSurchargeShouldCorrectlyDisplayed() {
+//        checkoutPage.verifyFuelSurchargeDisplayedCorrectlyInOrderTally();
+//    }
 
 
 

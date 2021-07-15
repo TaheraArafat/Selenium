@@ -1,12 +1,12 @@
 package com.selenium.pages;
 
 import com.selenium.configuration.CommonActions;
+
 import com.selenium.configuration.PropertyLoader;
-import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -24,7 +24,6 @@ public class CheckoutPage extends CommonActions {
 
     @FindBy(xpath = "//div[@class='button-section']//button[@class='paypal-button']/fd-icon")
     public WebElement btn_addPayPal;
-
 
     @FindBy(xpath = "//*[@id=\"addpaymentmethod_masterpass\"]")
     public WebElement btn_masterPass;
@@ -59,16 +58,37 @@ public class CheckoutPage extends CommonActions {
     @FindBy(xpath = "/html/body/div[2]/fd-checkout/div/div[2]/div/fd-address-drawer/div/fd-address-drawer-form/form/div[3]")
     public WebElement popUp_pickUpLocation;
 
+    @FindBy(xpath = "//*[@id='tip-error-dd']/div/p")
+    WebElement popupInfo_tipAmountField;
+
+
+    @FindBy(xpath = "//div[@class='tip-header']/span/b")
+    WebElement text_tip;
+
+    @FindBy(id = "tip-select")
+    WebElement tipSelectField;
+
+    @FindBy(tagName = "fd-checkout-order-tally")
+    WebElement orderTallyShadowRoot;
+
+    @FindBy(xpath = "/html/body/div[2]/fd-checkout/div/div[2]/div/div/fd-tip/fd-dropdown")
+    WebElement tip_textField;
+
     @FindBy(xpath = "//select[@id='tip-select']")
     public WebElement dropDown_tip;
 
-    @FindBy(tagName = "fd-checkout-order-tally")
-    public WebElement orderTallyShadowRoot;
+    @FindBy(xpath = "//*[@id='tip-tooltip-dd']/button")
+    WebElement tipInfoIcon;
+
+    @FindBy (id = "tip-info")
+    WebElement toolTipMessage;
 
     public void clickOnAddPaymentMethod() {
         clickOnElement(btn_addPaymentMethod);
         holdExecution(2000);
     }
+
+    public String tip = "5";
 
     public void clickOnPayPalButton(){
         clickOnElement(btn_payPal);
@@ -96,7 +116,6 @@ public class CheckoutPage extends CommonActions {
 
     public void addPaymentMethodIsDisplayed(){
         Verify.verifyIfElementIsDisplayed(popUp_CheckOutPaymentMethod);
-
     }
 
     public void PayWithMasterPassIsDisplayed(){
@@ -148,6 +167,74 @@ public class CheckoutPage extends CommonActions {
         Verify.verify( "Add Payment Button is not Displayed",getAttributeValue(btn_addPaymentMethod, "Add Payment Method"));
     }
 
+    public void verifyTipText(){
+        Verify.verify("Tip", getElementText(text_tip));
+    }
+
+    public void clickOnTipAmountField(){
+        clickOnElement(tipSelectField);
+    }
+
+    public String getTextFromTipField1(){
+       String st = getElementText(tip_textField);
+       return st;
+    }
+
+    public void selectAnAmount(){
+        selectDropdownOptionByIndex(tipSelectField,tip);
+    }
+
+    public void selectOtherAmount(){
+        selectDropdownOptionByVisibleText(tipSelectField,"Other Amount");
+    }
+
+    public void enterAnyTipAmount(String tipAmount){
+        typeText(tip_textField,tipAmount);
+        clickOnElement(text_tip);
+    }
+    //can i put the value in a variable and pass the  variable to expected result?
+    //if i put the value in int, how can i compare when i verify(int, String)
+    public void verifyTipAmountIsSelected(){
+        Verify.verify(tip, tip_textField.getAttribute("value"));
+    }
+
+    public String getTipFromOrderTally(){
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.tip_container div.value"));
+        String st = lbl_tip.getText();
+        return st.substring(1);
+    }
+
+    public void verifyOtherAmountIsSelected(){
+        Verify.verify("30.00",getTipFromOrderTally());
+    }
+
+    public void hoverOnTipInfoIcon(){
+        hoverOnElement(tipInfoIcon);
+    }
+
+    public void verifyToolTipIsDisplaying(){
+        Verify.verifyIfElementIsDisplayed(toolTipMessage);
+    }
+
+    public double subTotalFromOrderTally(){
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.subtotal_container div.value"));
+        String st = lbl_tip.getText();
+        String st2 =st.substring(1);
+        Double doubleValue = Double.parseDouble(st2);
+        return doubleValue;
+    }
+
+    public String getSubTotalFromOrderTally(){
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.subtotal_container div.value"));
+        String st = lbl_tip.getText();
+        String st2 =st.substring(1);
+        return st2;
+    }
+
+    public void verifyMaxTipIsNotMoreThanSubTotal(){
+        Verify.verify(getSubTotalFromOrderTally(), getTipFromOrderTally());
+    }
+
     public void selectTipFromDropDownAmount(String value){
         selectDropdownOptionByValue(dropDown_tip, value);
     }
@@ -183,3 +270,5 @@ public class CheckoutPage extends CommonActions {
         Verify.verify(getUSDFrom(PropertyLoader.getValue("global.fuelSurcharge")), getFuelSurcharge());
     }
 }
+
+
