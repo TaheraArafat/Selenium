@@ -105,6 +105,7 @@ public class AccountPreferenceTests extends TestBase {
         preferencePage.clickOnSaveForChangeYourPassword();
         preferencePage.verifyYourPasswordChangesHaveBeenSaved();
     }
+
 }
 
 
