@@ -2,6 +2,7 @@ package com.selenium.pages;
 
 import com.selenium.configuration.CommonActions;
 
+import com.selenium.configuration.PropertyLoader;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebDriver;
@@ -244,44 +245,41 @@ public class CheckoutPage extends CommonActions {
     public void verifyMaxTipIsNotMoreThanSubTotal(){
         Verify.verify(getSubTotalFromOrderTally(), getTipFromOrderTally());
     }
+
+    public void selectTipFromDropDownAmount(String value){
+        selectDropdownOptionByValue(dropDown_tip, value);
+    }
+
+    public void verifySelectedTipAmountDisplayedCorrectlyInOrderTally(double selectedAmount) {
+      Verify.verify(selectedAmount, getAmountOfTip());
+    }
+
+    private double getAmountOfTip() {
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.tip_container div.value"));
+        return getUSDFrom(getElementText(lbl_tip));
+    }
+
+    public double getBottleDeposit() {
+        WebElement lbl_bottleDeposit = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.bottle-deposit_container div.value"));
+        return getUSDFrom(getElementText(lbl_bottleDeposit));
+    }
+
+    public void verifyBottleDepositDisplayedCorrectlyInOrderTally() {
+        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.bottleDeposit")), getBottleDeposit());
+    }
+
+    public double getFuelSurcharge() {
+        double fuelSurcharge = 0.00;
+        List<WebElement> lbl_fuelSurcharge = getShadowRootElement(orderTallyShadowRoot).findElements(By.cssSelector("div.fuel-surcharge_container div.value"));
+        if(lbl_fuelSurcharge.size() > 0) {
+            fuelSurcharge = getUSDFrom(getElementText(lbl_fuelSurcharge.get(0)));
+        }
+        return fuelSurcharge;
+    }
+
+    public void verifyFuelSurchargeDisplayedCorrectlyInOrderTally() {
+        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.fuelSurcharge")), getFuelSurcharge());
+    }
 }
 
 
-
-//=======
-//    public void selectTipFromDropDownAmount(String value){
-//        selectDropdownOptionByValue(dropDown_tip, value);
-//    }
-//
-//    public void verifySelectedTipAmountDisplayedCorrectlyInOrderTally(double selectedAmount) {
-//      Verify.verify(selectedAmount, getAmountOfTip());
-//    }
-//
-//    private double getAmountOfTip() {
-//        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.tip_container div.value"));
-//        return getUSDFrom(getElementText(lbl_tip));
-//    }
-//
-//    public double getBottleDeposit() {
-//        WebElement lbl_bottleDeposit = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.bottle-deposit_container div.value"));
-//        return getUSDFrom(getElementText(lbl_bottleDeposit));
-//    }
-//
-//    public void verifyBottleDepositDisplayedCorrectlyInOrderTally() {
-//        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.bottleDeposit")), getBottleDeposit());
-//    }
-//
-//    public double getFuelSurcharge() {
-//        double fuelSurcharge = 0.00;
-//        List<WebElement> lbl_fuelSurcharge = getShadowRootElement(orderTallyShadowRoot).findElements(By.cssSelector("div.fuel-surcharge_container div.value"));
-//        if(lbl_fuelSurcharge.size() > 0) {
-//            fuelSurcharge = getUSDFrom(getElementText(lbl_fuelSurcharge.get(0)));
-//        }
-//        return fuelSurcharge;
-//    }
-//
-//    public void verifyFuelSurchargeDisplayedCorrectlyInOrderTally() {
-//        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.fuelSurcharge")), getFuelSurcharge());
-//    }
-//}
-//>>>>>>> development
