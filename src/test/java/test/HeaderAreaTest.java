@@ -91,18 +91,18 @@ public class HeaderAreaTest extends WebDriverConfig {
     }
 //    @Test
 //    public void freshDirectLoginWithFacebook()  throws InterruptedException{
-//        homePage.hoverOnAccountMenu();
-//        homePage.clickOnSignInButton();
-//        homePage.holdExecution(5000);
-//        homePage.switchToSocialLoginFrame();
-//        homePage.clickOnSignInWithFacebook();
+//       headerArea.hoverOnAccountMenu();
+//        headerArea.clickOnSignInButton();
+//        headerArea.holdExecution(5000);
+//        headerArea.switchToSocialLoginFrame();
+//        headerArea.clickOnSignInWithFacebook();
 //        try {
-//            homePage.switchWindow(1,false);
+//            headerArea.switchWindow(1,false);
 //            FDFacebookLoginWindow fdFacebookLoginWindow = new FDFacebookLoginWindow(driver);
 //            fdFacebookLoginWindow.verifyFacebookLoginWindowHeaderTitle();
 //            fdFacebookLoginWindow.verifyFacebookLoginWindowUrl();
 //        } finally {
-//            homePage.switchWindow(0,true);
+//            headerArea.switchWindow(0,true);
 //        }
 
 //    @Test
