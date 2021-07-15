@@ -35,7 +35,7 @@ public class CheckoutAddDeliveryAddressExistingUserTests extends TestBase {
     }
 
     @Test
-    public void expressIconDisplayForEligibleExpressAddress() throws InterruptedException {
+    public  void expressIconDisplayForEligibleExpressAddress() throws InterruptedException {
         checkout.expressIconIsDisplayedInExpressEligibleAddress();
     }
 

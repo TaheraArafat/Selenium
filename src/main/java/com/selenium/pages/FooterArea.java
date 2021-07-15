@@ -7,8 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-public class
-FooterArea extends CommonActions {
+public class FooterArea extends CommonActions {
     public FooterArea(WebDriver driver){
         this.driver = driver;
         initElement();

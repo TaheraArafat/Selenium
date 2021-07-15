@@ -24,7 +24,6 @@ public class CheckoutPaymentMethodTest extends TestBase {
     public static void setupTest() throws InterruptedException {
         signIn(USER_ID);
     }
-
     @Before
     public void initCheckoutSetUpTest(){
         checkoutPage.navigateTo(navigateToCheckout);
