@@ -8,6 +8,7 @@ target/
 .class
 bin/
 obj/
+allure-results/
 *.html
 *.log
 *.PNG
