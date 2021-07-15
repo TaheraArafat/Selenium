@@ -1,8 +1,9 @@
 package com.selenium.pages;
 
 import com.selenium.configuration.CommonActions;
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -56,6 +57,10 @@ public class CheckoutPage extends CommonActions {
     @FindBy(xpath = "/html/body/div[2]/fd-checkout/div/div[2]/div/fd-address-drawer/div/fd-address-drawer-form/form/div[3]")
     public WebElement popUp_pickUpLocation;
 
+    @FindBy(xpath = "//*[@id='tip-error-dd']/div/p")
+    WebElement popupInfo_tipAmountField;
+
+
     @FindBy(xpath = "//div[@class='tip-header']/span/b")
     WebElement text_tip;
 
@@ -66,13 +71,23 @@ public class CheckoutPage extends CommonActions {
     WebElement orderTallyShadowRoot;
 
     @FindBy(xpath = "/html/body/div[2]/fd-checkout/div/div[2]/div/div/fd-tip/fd-dropdown")
-    WebElement ti_textField;
+    WebElement tip_textField;
 
+    @FindBy(xpath = "//select[@id='tip-select']")
+    public WebElement dropDown_tip;
+
+    @FindBy(xpath = "//*[@id='tip-tooltip-dd']/button")
+    WebElement tipInfoIcon;
+
+    @FindBy (id = "tip-info")
+    WebElement toolTipMessage;
 
     public void clickOnAddPaymentMethod() {
         clickOnElement(btn_addPaymentMethod);
         holdExecution(2000);
     }
+
+    public String tip = "5";
 
     public void clickOnPayPalButton(){
         clickOnElement(btn_payPal);
@@ -159,8 +174,13 @@ public class CheckoutPage extends CommonActions {
         clickOnElement(tipSelectField);
     }
 
+    public String getTextFromTipField1(){
+       String st = getElementText(tip_textField);
+       return st;
+    }
+
     public void selectAnAmount(){
-        selectDropdownOptionByIndex(tipSelectField,5);
+        selectDropdownOptionByIndex(tipSelectField,tip);
     }
 
     public void selectOtherAmount(){
@@ -168,15 +188,13 @@ public class CheckoutPage extends CommonActions {
     }
 
     public void enterAnyTipAmount(){
-        typeText(ti_textField,"30");
+        typeText(tip_textField,"30");
+        clickOnElement(text_tip);
     }
-
-    public void clickOnTip(){
-    clickOnElement(text_tip);
-    }
-
+    //can i put the value in a variable and pass the  variable to expected result?
+    //if i put the value in int, how can i compare when i verify(int, String)
     public void verifyTipAmountIsSelected(){
-        Verify.verify("$5", getDefaultValueFromADropdown(tipSelectField));
+        Verify.verify(tip, tip_textField.getAttribute("value"));
     }
 
     public String getTipFromOrderTally(){
@@ -188,4 +206,82 @@ public class CheckoutPage extends CommonActions {
     public void verifyOtherAmountIsSelected(){
         Verify.verify("30.00",getTipFromOrderTally());
     }
+
+    public void hoverOnTipInfoIcon(){
+        hoverOnElement(tipInfoIcon);
+    }
+
+    public void verifyToolTipIsDisplaying(){
+        Verify.verifyIfElementIsDisplayed(toolTipMessage);
+    }
+
+    public double subTotalFromOrderTally(){
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.subtotal_container div.value"));
+        String st = lbl_tip.getText();
+        String st2 =st.substring(1);
+        Double doubleValue = Double.parseDouble(st2);
+        return doubleValue;
+    }
+
+    public String getSubTotalFromOrderTally(){
+        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.subtotal_container div.value"));
+        String st = lbl_tip.getText();
+        String st2 =st.substring(1);
+        return st2;
+    }
+
+    public String tipMoreThanSubTotal(){
+        double d = subTotalFromOrderTally()+10.00;
+        String st = String.valueOf(d);
+        return st;
+    }
+
+    public void enterTip(){
+        typeText(tip_textField,tipMoreThanSubTotal());
+        clickOnElement(text_tip);
+    }
+
+    public void verifyMaxTipIsNotMoreThanSubTotal(){
+        Verify.verify(getSubTotalFromOrderTally(), getTipFromOrderTally());
+    }
 }
+
+
+
+//=======
+//    public void selectTipFromDropDownAmount(String value){
+//        selectDropdownOptionByValue(dropDown_tip, value);
+//    }
+//
+//    public void verifySelectedTipAmountDisplayedCorrectlyInOrderTally(double selectedAmount) {
+//      Verify.verify(selectedAmount, getAmountOfTip());
+//    }
+//
+//    private double getAmountOfTip() {
+//        WebElement lbl_tip = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.tip_container div.value"));
+//        return getUSDFrom(getElementText(lbl_tip));
+//    }
+//
+//    public double getBottleDeposit() {
+//        WebElement lbl_bottleDeposit = getShadowRootElement(orderTallyShadowRoot).findElement(By.cssSelector("div.bottle-deposit_container div.value"));
+//        return getUSDFrom(getElementText(lbl_bottleDeposit));
+//    }
+//
+//    public void verifyBottleDepositDisplayedCorrectlyInOrderTally() {
+//        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.bottleDeposit")), getBottleDeposit());
+//    }
+//
+//    public double getFuelSurcharge() {
+//        double fuelSurcharge = 0.00;
+//        List<WebElement> lbl_fuelSurcharge = getShadowRootElement(orderTallyShadowRoot).findElements(By.cssSelector("div.fuel-surcharge_container div.value"));
+//        if(lbl_fuelSurcharge.size() > 0) {
+//            fuelSurcharge = getUSDFrom(getElementText(lbl_fuelSurcharge.get(0)));
+//        }
+//        return fuelSurcharge;
+//    }
+//
+//    public void verifyFuelSurchargeDisplayedCorrectlyInOrderTally() {
+//        Verify.verify(getUSDFrom(PropertyLoader.getValue("global.fuelSurcharge")), getFuelSurcharge());
+//    }
+//}
+//>>>>>>> development

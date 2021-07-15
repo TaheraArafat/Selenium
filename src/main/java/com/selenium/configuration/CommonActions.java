@@ -11,10 +11,11 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonActions {
     public static WebDriver driver;
@@ -26,17 +27,6 @@ public class CommonActions {
     protected void clickOnElement(WebElement elementToClick) {
         elementHighlighter(elementToClick);
         elementToClick.click();
-    }
-
-    public void dd(WebElement element){
-        JavascriptExecutor jse = (JavascriptExecutor)driver;
-        jse.executeScript("arguments[0].value='enter the value here';", element);
-    }
-
-
-    public void enterTextUsingJavaScriptExe(String text, WebElement element){
-        JavascriptExecutor jse = (JavascriptExecutor)driver;
-        jse.executeScript(text, element);
     }
 
     public void navigateTo(String url) {
@@ -55,7 +45,6 @@ public class CommonActions {
     protected String getTitle() {
         return driver.getTitle();
     }
-
 
     protected void hoverOnElement(WebElement elementToHover) {
         elementHighlighter(elementToHover);
@@ -117,6 +106,12 @@ public class CommonActions {
         select.selectByIndex(index);
     }
 
+    protected void selectDropdownOptionByIndex(WebElement element, String index) {
+        elementHighlighter(element);
+        Select select = new Select(element);
+        select.selectByValue(index);
+    }
+
     protected void selectDropdownOptionByValue(WebElement element,String value) {
         elementHighlighter(element);
         Select select = new Select(element);
@@ -164,14 +159,33 @@ public class CommonActions {
         return element.getAttribute(attributeName);
     }
 
+    public WebElement getShadowRootElement(WebElement element) {
+        elementHighlighter(element);
+        return (WebElement) ((JavascriptExecutor) driver)
+                .executeScript("return arguments[0].shadowRoot",element);
+    }
+
+    public double getUSDFrom(String givenString) {
+        return getDoubleFrom(givenString, "[0-9]+.[0-9]+");
+    }
+
+    public double getDoubleFrom(String givenString, String pattern) {
+        double value = 0.0;
+        Matcher matcher = Pattern.compile(pattern).matcher(givenString);
+        if (matcher.find()) {
+            value = Double.parseDouble(matcher.group(0));
+        }
+        return value;
+    }
+
     public void clearInputField(WebElement element){
         element.clear();
     }
 
-    public WebElement getShadowRootElement(WebElement element) {
-        WebElement ele = (WebElement) ((JavascriptExecutor)driver)
-                .executeScript("return arguments[0].shadowRoot", element);
-        return ele;
-    }
+//    public WebElement getShadowRootElement(WebElement element) {
+//        WebElement ele = (WebElement) ((JavascriptExecutor)driver)
+//                .executeScript("return arguments[0].shadowRoot", element);
+//        return ele;
+//    }
 
 }

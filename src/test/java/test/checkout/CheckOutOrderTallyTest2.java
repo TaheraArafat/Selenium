@@ -2,7 +2,6 @@ package test.checkout;
 
 import com.selenium.configuration.PropertyLoader;
 import com.selenium.pages.CheckoutPage;
-import com.selenium.pages.FDViewCartPage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,16 +36,24 @@ public class CheckOutOrderTallyTest2 extends TestBase {
     }
 
     @Test
-    public void verifyOtherAmountCanBeSelected(){
+    public void verifyCustomTipAmountCanBeSelectedFromTipSelectorDropDown(){
         checkoutPage.clickOnTipAmountField();
         checkoutPage.selectOtherAmount();
-        System.out.println("selectOtherAmount");
-        checkoutPage.initElement();
-        System.out.println("holdExecution");
         checkoutPage.enterAnyTipAmount();
-        System.out.println("enterAnyTipAmount");
-        checkoutPage.clickOnTip();
         checkoutPage.verifyOtherAmountIsSelected();
-        System.out.println("verifyOtherAmountIsSelected");
+    }
+
+    @Test
+    public void verifyToolTipCanBeOpenedByHoveringOnTheInfoIcon(){
+        checkoutPage.hoverOnTipInfoIcon();
+        checkoutPage.verifyToolTipIsDisplaying();
+    }
+
+    @Test
+    public void verifyMaxTipAmountCanNotExceedOrderSubtotal(){
+        checkoutPage.clickOnTipAmountField();
+        checkoutPage.selectOtherAmount();
+        checkoutPage.enterTip();
+        checkoutPage.verifyMaxTipIsNotMoreThanSubTotal();
     }
 }
