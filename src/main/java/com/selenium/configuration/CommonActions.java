@@ -66,6 +66,10 @@ public class CommonActions {
         return element.getText();
     }
 
+     protected String roundOffTo2DecPlaces(float val) {
+        return String.format("%.2f", val);
+    }
+
 
     public void switchWindow(int windowIndex, boolean closeCurrentWindow) {
         Set<String> availableWindows = driver.getWindowHandles();
@@ -175,9 +179,21 @@ public class CommonActions {
         return value;
     }
 
-
+    public WebElement scrollDown (WebElement element) {
+        elementHighlighter(element);
+        return (WebElement) ((JavascriptExecutor) driver).executeScript("scroll(0, 250);");
+    }
 
     public void clearInputField(WebElement element){
         element.clear();
+    }
+
+    public void scrollToView(WebElement element) {
+        if(element != null) {
+            elementHighlighter(element);
+            JavascriptExecutor js = ((JavascriptExecutor) driver);
+            js.executeScript("arguments[0].scrollIntoView(true);", element);
+            holdExecution(1000);
+        }
     }
 }

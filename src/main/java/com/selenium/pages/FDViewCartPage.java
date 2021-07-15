@@ -1,6 +1,7 @@
 package com.selenium.pages;
 
 import com.selenium.configuration.CommonActions;
+import com.selenium.configuration.PropertyLoader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +13,7 @@ public class FDViewCartPage extends CommonActions {
     public HeaderArea headerArea;
     public FooterArea footerArea;
 
-    public FDViewCartPage (WebDriver driver) {
+    public FDViewCartPage(WebDriver driver) {
         this.driver = driver;
         initElement();
         headerArea = new HeaderArea(driver);
@@ -23,12 +24,12 @@ public class FDViewCartPage extends CommonActions {
     public List<WebElement> inp_productQty;
 
     @FindBy(xpath = "/html/body/main/fd-view-cart/main/div/div/div[1]/div[2]/fd-cartcontent/form/div[4]/button")
-    public  WebElement btn_emptyCart;
+    public WebElement btn_emptyCart;
 
     @FindBy(xpath = "//*[@id=\"fd-overlay-1702642097\"]/div")
     public WebElement cartEmptyPopup;
 
-    @FindBy (xpath = "//*[@id=\"fd-order-tally\"]")
+    @FindBy(xpath = "//*[@id=\"fd-order-tally\"]")
     public WebElement estimated_total;
 
     @FindBy(xpath = "//div[@fd-product]/descendant::div[@class='cartline-title cartline-box']/descendant::a")
@@ -53,10 +54,22 @@ public class FDViewCartPage extends CommonActions {
     public WebElement popup_freeDelivery;
 
     @FindBy(xpath = "//span[@class='cartsection-sectionsubtotal__value']")
-    public WebElement btn_subtotal;
+    public WebElement value_subtotal;
+
+    @FindBy(xpath = "//span[@class='multi_indicator bold'][contains(text(), 'T')]/parent::div/p")
+    public List<WebElement> lbl_taxItems;
+
+
+    @FindBy(xpath = "//a[normalize-space()='Checkout']")
+    public WebElement btn_ViewCartCheckout;
 
     public void changeQuantityValue(int itemIndexNum, int value) {
         selectDropdownOptionByVisibleText(inp_productQty.get(itemIndexNum), String.valueOf(value));
+    }
+
+    public void clickOnTheViewCartCheckOutButton(){
+        clickOnElement(btn_ViewCartCheckout);
+        holdExecution(3000);
     }
 
     public int getItemQtyDropdownValue(int index) {
@@ -71,7 +84,7 @@ public class FDViewCartPage extends CommonActions {
         Verify.verify(startValue, endValue + decreaseBy);
     }
 
-    public void clickOncEmptyCartButton(){
+    public void clickOncEmptyCartButton() {
         clickOnElement(btn_emptyCart);
     }
 
@@ -79,38 +92,38 @@ public class FDViewCartPage extends CommonActions {
         Verify.verifyIfElementIsDisplayed(cartEmptyPopup);
     }
 
-    public void clickOnAnItemLink(int index){
+    public void clickOnAnItemLink(int index) {
         clickOnElement(lnk_products.get(index));
     }
 
-    public void verifyRedirectToTheProductPdpPage(){
+    public void verifyRedirectToTheProductPdpPage() {
         Verify.verifyCurrentUrlContainsText("https://fdtest.freshdirect.com/pdp.jsp");
     }
 
-    public void clickOnDeleteButton(int index){
+    public void clickOnDeleteButton(int index) {
         clickOnElement(btn_deleteIcon.get(index));
         waitForElementToBeDisappear(btn_deleteIcon.get(index), 5);
     }
 
-    public double findInitSubtotalForEachProduct(int index){
+    public double findInitSubtotalForEachProduct(int index) {
         String initPrice = lbl_productPriceValue.get(index).getText();
-        String temp = initPrice.replace("$","") ;
-        double  initialPrice = Double.parseDouble(temp);
-        return  initialPrice;
+        String temp = initPrice.replace("$", "");
+        double initialPrice = Double.parseDouble(temp);
+        return initialPrice;
     }
 
-    public double findAllSubtotalProduct(){
-        String initPrice = btn_subtotal.getText();
-        String temp = initPrice.replace("$","") .replace("*","");
-        double  initialPrice = Double.parseDouble(temp);
-        return  initialPrice;
+    public double findAllSubtotalProductAmount() {
+        String subTotalPriceOfElements = value_subtotal.getText();
+        String temp = subTotalPriceOfElements.replace("$", "").replace("*", "");
+        double initialSubTotalPrice = Double.parseDouble(temp);
+        return initialSubTotalPrice;
     }
 
-    public void verifyPriceChangedWithQuantityIncrease(int index, boolean condition){
+    public void verifyPriceChangedWithQuantityIncrease(int index, boolean condition) {
         Verify.verify(condition);
     }
 
-    public void verifyPriceChangedWithQuantityDecrease(int index, double expected){
+    public void verifyPriceChangedWithQuantityDecrease(int index, double expected) {
         Verify.verify(expected, findInitSubtotalForEachProduct(index));
     }
 
@@ -122,27 +135,48 @@ public class FDViewCartPage extends CommonActions {
         Verify.verify(beforeCount, afterCount);
     }
 
-    public void clickOnCheckoutButton(){
+    public void clickOnCheckoutButton() {
         clickOnElement(btn_checkout);
     }
 
-    public void verifyClickingOnCheckoutButtonCanOpenCheckoutPage(){
+    public void verifyClickingOnCheckoutButtonCanOpenCheckoutPage() {
         Verify.verifyCurrentUrlContainsText("https://fdtest.freshdirect.com/expressco/checkout.jsp");
     }
 
-    public void verifyDisplayOrderMinimumWarningMessageForLessThanMinimumCartTotal(){
+    public void verifyDisplayOrderMinimumWarningMessageForLessThanMinimumCartTotal() {
         Verify.verifyIfElementIsDisplayed(lnk_forMinimum);
     }
 
-    public void clickOnFreeButtonLink(){
+    public double getTaxFor(double amount) {
+        double nyTaxPer = getUSDFrom(PropertyLoader.getValue("global.tax.ny"));
+        return (amount * nyTaxPer) / 100;
+    }
+
+    public void clickOnFreeButtonLink() {
         clickOnElement(btn_freeLink);
     }
 
-    public void verifyFreeDeliveryPopupIsDisplayed(){
+    public void verifyFreeDeliveryPopupIsDisplayed() {
         Verify.verifyIfElementIsDisplayed(popup_freeDelivery);
     }
 
+    public double getTotalTaxFromTaxAbleItem() {
+        double price = 0.00;
+        for (int i = 0; i < lbl_taxItems.size(); i++) {
+            WebElement totalItem = lbl_taxItems.get(i);
+            String priceAmount = getElementText(totalItem);
+            price += getUSDFrom(priceAmount);
+          scrollDown(lbl_taxItems.get(i));
+        }
+        return price;
+    }
+
+    public double getTaxPercentageFromTaxAbleItems()  {
+        double nycTax = getUSDFrom(PropertyLoader.getValue("global.tax.ny"));
+        return ( getTotalTaxFromTaxAbleItem() * nycTax) / 100;
+    }
 
 }
+
 
 

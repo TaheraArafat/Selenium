@@ -1,7 +1,6 @@
 package test;
 
 import com.selenium.configuration.PropertyLoader;
-import com.selenium.configuration.WebDriverConfig;
 import com.selenium.pages.FDHomePage;
 import com.selenium.pages.FDViewCartPage;
 import org.junit.Before;
@@ -128,13 +127,13 @@ public class FDViewCartPageTests extends TestBase {
         double miniMunCartPrice = 30.00;
         cartPage.changeQuantityValue(0, 2);
         cartPage.holdExecution(2500);
-        double currentSubTotal = cartPage.findAllSubtotalProduct();
+        double currentSubTotal = cartPage.findAllSubtotalProductAmount();
         while(currentSubTotal < miniMunCartPrice){
             int currentValue = cartPage.getItemQtyDropdownValue(0);
             cartPage.changeQuantityValue(0, currentValue +1);
             int afterValue = cartPage.getItemQtyDropdownValue(0);
             cartPage.holdExecution(2500);
-            currentSubTotal = cartPage.findAllSubtotalProduct();
+            currentSubTotal = cartPage.findAllSubtotalProductAmount();
             System.out.println("currentSubtotal "+ currentSubTotal);
         }
 
