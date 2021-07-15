@@ -188,8 +188,8 @@ public class CheckoutPage extends CommonActions {
         selectDropdownOptionByVisibleText(tipSelectField,"Other Amount");
     }
 
-    public void enterAnyTipAmount(){
-        typeText(tip_textField,"30");
+    public void enterAnyTipAmount(String tipAmount){
+        typeText(tip_textField,tipAmount);
         clickOnElement(text_tip);
     }
     //can i put the value in a variable and pass the  variable to expected result?
@@ -229,17 +229,6 @@ public class CheckoutPage extends CommonActions {
         String st = lbl_tip.getText();
         String st2 =st.substring(1);
         return st2;
-    }
-
-    public String tipMoreThanSubTotal(){
-        double d = subTotalFromOrderTally()+10.00;
-        String st = String.valueOf(d);
-        return st;
-    }
-
-    public void enterTip(){
-        typeText(tip_textField,tipMoreThanSubTotal());
-        clickOnElement(text_tip);
     }
 
     public void verifyMaxTipIsNotMoreThanSubTotal(){

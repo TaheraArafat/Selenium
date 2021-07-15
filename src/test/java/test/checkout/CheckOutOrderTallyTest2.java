@@ -39,7 +39,7 @@ public class CheckOutOrderTallyTest2 extends TestBase {
     public void verifyCustomTipAmountCanBeSelectedFromTipSelectorDropDown(){
         checkoutPage.clickOnTipAmountField();
         checkoutPage.selectOtherAmount();
-        checkoutPage.enterAnyTipAmount();
+        checkoutPage.enterAnyTipAmount("30");
         checkoutPage.verifyOtherAmountIsSelected();
     }
 
@@ -51,9 +51,10 @@ public class CheckOutOrderTallyTest2 extends TestBase {
 
     @Test
     public void verifyMaxTipAmountCanNotExceedOrderSubtotal(){
+        double tip = checkoutPage.subTotalFromOrderTally() + 10.0;
         checkoutPage.clickOnTipAmountField();
         checkoutPage.selectOtherAmount();
-        checkoutPage.enterTip();
+        checkoutPage.enterAnyTipAmount(String.valueOf(tip));
         checkoutPage.verifyMaxTipIsNotMoreThanSubTotal();
     }
 }
